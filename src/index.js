@@ -36,11 +36,11 @@ const wrapAsyncErr = (promFn) => (err, req, res, next) =>
     .catch((/** @type {any} */ err) => next(err))
 
 /**
- * promisify middlewares
+ * promisify connect middlewares
  * @param  {...any} mws
  * @returns {any[]} promisified middlewares
  */
-export function promid (...mws) {
+export function promex (...mws) {
   return mws.map(fn => {
     if (typeof fn !== 'function') {
       return fn
@@ -62,10 +62,10 @@ export function promid (...mws) {
 }
 
 /**
- * promisify
+ * promisify for express app or router
  * @param {Application|Router} app express application or router
  */
-export function promisify (app) {
+export function promexify (app) {
   ;['use', ...METHODS]
     .map(method => method.toLowerCase())
     .forEach(method => {
@@ -74,7 +74,7 @@ export function promisify (app) {
         // @ts-ignore
         const wrapper = app[method]
         const wrapped = function (/** @type {Handler[]} */...mws) {
-          return wrapper.apply(app, promid(...mws))
+          return wrapper.apply(app, promex(...mws))
         }
         // @ts-ignore
         app[method] = wrapped

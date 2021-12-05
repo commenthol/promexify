@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import supertest from 'supertest'
 import express from 'express'
 import { METHODS } from 'http'
-import { promisify } from '../src/index.js'
+import { promexify } from '../src/index.js'
 
 const LC_METHODS = METHODS
   .map(method => method.toLowerCase())
@@ -56,7 +56,7 @@ describe('promexify', function () {
   describe('express.app', function () {
     it('use', function () {
       const app = express()
-      promisify(app)
+      promexify(app)
       app.use(
         init(),
         mw('1'),
@@ -79,7 +79,7 @@ describe('promexify', function () {
     LC_METHODS.forEach(method => {
       it(method, function () {
         const app = express()
-        promisify(app)
+        promexify(app)
         app[method]('/',
           init(),
           mw('1'),
@@ -107,7 +107,7 @@ describe('promexify', function () {
     it('use', function () {
       const app = express()
       const router = express.Router()
-      promisify(router)
+      promexify(router)
       router.use(
         mw('1'),
         throwErr('err2'),
@@ -134,7 +134,7 @@ describe('promexify', function () {
       it(method, function () {
         const app = express()
         const router = express.Router()
-        promisify(router)
+        promexify(router)
         router[method]('/',
           mw('1'),
           throwErr('err2'),
@@ -164,9 +164,9 @@ describe('promexify', function () {
   describe('express.app.Router', function () {
     it('use', function () {
       const app = express()
-      promisify(app)
+      promexify(app)
       const router = express.Router()
-      promisify(router)
+      promexify(router)
       router.use(
         mw('1'),
         throwErr('err2'),
@@ -193,9 +193,9 @@ describe('promexify', function () {
     LC_METHODS.forEach(method => {
       it(method, function () {
         const app = express()
-        promisify(app)
+        promexify(app)
         const router = express.Router()
-        promisify(router)
+        promexify(router)
         router[method]('/',
           mw('1'),
           throwErr('err2'),

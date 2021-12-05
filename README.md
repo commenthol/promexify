@@ -1,10 +1,10 @@
-# promexify 
+# promexify
 
-Safely use `async` `await` middlewares in express. 
+Safely use `async` `await` middlewares in express.
 
 No need to write `next()` and deal with unresolved promise rejections.
 
-Forget about writing this kind of middlewares... 
+Forget about writing this kind of middlewares...
 
 ```js
 async function myAsyncMiddleware (req, res, next) {
@@ -15,19 +15,21 @@ async function myAsyncMiddleware (req, res, next) {
   } catch (e) {
     next(e)
   }
-} 
+}
 ```
 
-# usage 
+# usage
+
+**NOTE**: Always use `async` functions. This will **NOT** work on functions retuning a `Promise`.
 
 ```js
 import express from 'express'
-import { promisify } from 'promexify'
+import { promexify } from 'promexify'
 
 const timeout = ms => new Promise(resolve => setTimeout(() => resolve(), ms))
 
 const app = express()
-promisify(app) // <<< enables async await middlewares 
+promexify(app) // <<< enables async await middlewares
 
 app.use(
   async (req, res) => {
@@ -47,7 +49,7 @@ also works on `express.Router`
 
 ```js
 const router = new express.Router()
-promisify(router) // <<< enables async await middlewares 
+promexify(router) // <<< enables async await middlewares
 
 router.get('/',
   async (req, res) => {
@@ -61,7 +63,21 @@ app.use('/router', router)
 app.use((req, res) => res.end(res.body))
 ```
 
-**NOTE**: Always use `async` functions. Will **NOT** work on functions retuning a `Promise`.
+Or even on a some middlewares
+
+```js
+import express from 'express'
+import { promex } from 'promexify'
+
+const app = express()
+app.use(
+  bodyParser.json(),
+  ...promex(
+    async (req, res) { res.body = await () => {...} },
+    async (req, res) { ... },
+  )
+)
+```
 
 # license
 
