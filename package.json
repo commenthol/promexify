@@ -1,6 +1,6 @@
 {
   "name": "promexify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "async await middlewares for express",
   "keywords": [
     "express",
